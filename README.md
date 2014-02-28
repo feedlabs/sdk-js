@@ -1,2 +1,2 @@
-FeedMe JS Client
-----------------
+JS Client
+---------
