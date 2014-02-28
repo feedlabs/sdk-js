@@ -5,14 +5,38 @@
 		<script type="text/javascript" src="../client.js"></script>
 	</head>
 	<body>
+
+		<div id="fooId">
+
+		</div>
+
+
 		<script type="text/javascript">
 
-			var myOptions = {foo: 'bar'};
-			var callback = function(data) {
-				console.log('init done!', 'options are now: ', data);
+			var myOptions = {outputContainerId: 'fooId'};
+			var callbackForInit = function() {
+				console.log('init done!');
 			};
 
-			MyPlugin.init(myOptions, callback);
+			var callbackForPrintOutput = function() {
+				console.log('output print done!');
+			};
+
+			MyPlugin.on('init', callbackForInit);
+			MyPlugin.on('printOutput', callbackForPrintOutput);
+
+			var stylerFunction = function(data) {
+				var html = '';
+				html += '<div>';
+				html += 'type=' + data.type + '<br>';
+				html += 'name=' + data.name + '<br>';
+				html += 'params=' + data.params + '<br>';
+				html += '</div>';
+
+				return html;
+			};
+
+			MyPlugin.init(myOptions, stylerFunction);
 
 			/////
 

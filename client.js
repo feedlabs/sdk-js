@@ -3,20 +3,48 @@
 	var MyPlugin = {
 
 		handlers: {},
+		outputContainer: null,
 		options: {
-			foo: 'foo'
+			outputContainerId: 'defaultContainerId'
 		},
 
 		/**
 		 * @param {Object} options
-		 * @param {Function} callback
+		 * @param {Function|Null} stylerFunction
 		 */
-		init: function(options, callback) {
+		init: function(options, stylerFunction) {
 			options = this._extend(this.options, options);
+			this.stylerFunction = stylerFunction || this.stylerFunction;
 
-			// do stuff
+			this.outputContainer = document.getElementById(options.outputContainerId);
 
-			callback(options);
+			// sample data
+			var data = {type: 1, name: 'foo', params: 'bar'};
+
+			this.printOutput(data);
+
+			this._executeHandlers('init');
+		},
+
+		shout: function() {
+			console.log('hello from shout');
+
+			this._executeHandlers('shout');
+		},
+
+		printOutput: function(data) {
+			if (this.outputContainer) {
+				this.outputContainer.innerHTML = this.stylerFunction(data);
+			} else {
+				console.log('No `outputContainer` is defined. Add a container with `id=defaultContainerId` or pass a `outputContainerId` at init.');
+			}
+
+			this._executeHandlers('printOutput');
+		},
+
+		stylerFunction: function(data) {
+			// default styler function
+			return JSON.stringify(data);
 		},
 
 		// on function which collects handlers
@@ -28,20 +56,10 @@
 			this.handlers[eventName].push(handler);
 		},
 
-		//so we expose a shout function
-		shout: function() {
-
-			console.log('hello from shout');
-
-			this._executeHandlers('shout');
-		},
-
 		// internal function that executes handlers with a given name
 		_executeHandlers: function(eventName) {
 			// get all handlers with the selected name
-			var handler = this.handlers[eventName] || []
-				, len = handler.length
-				, i;
+			var handler = this.handlers[eventName] || [], len = handler.length, i;
 			// execute each
 			for (i = 0; i < len; i++) {
 				// use apply to specify what "this" and parameters the callback gets
