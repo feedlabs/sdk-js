@@ -11,15 +11,15 @@
 				console.log('all done!', 'data: ', data);
 			};
 
-			FeedMe.init({foo: 'bar'}, callback);
+			MyPlugin.init({foo: 'bar'}, callback);
 
 
-			FeedMe.on('shout', function() {
+			MyPlugin.on('shout', function() {
 				console.log('callback for shout');
 			});
 
 			//execute shout
-			FeedMe.shout();
+			MyPlugin.shout();
 
 		</script>
 	</body>

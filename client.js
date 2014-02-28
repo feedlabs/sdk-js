@@ -1,6 +1,6 @@
 (function(window) {
 
-	var FeedMe = {
+	var MyPlugin = {
 
 		options: {
 			foo: 'foo'
@@ -18,8 +18,8 @@
 			callback(options);
 
 			// this.callbackStyler = callbackStyler
-			// connect to feedapi
-			// if succesfull then registerWebSocketHandle(this.refreshFeed)
+			// connect to api
+			// if succesfull then registerWebSocketHandle(this.refresh)
 		},
 
 		//so we expose a shout function
@@ -41,7 +41,7 @@
 		//			on.('data', callback(data));
 		//		},
 
-		//		refreshFeed: function(data) {
+		//		refresh: function(data) {
 		//			this.callbackStyler(data);
 		//		},
 
@@ -105,16 +105,16 @@
 			return c;
 		}
 
-	}; // FeedMe
+	}; // MyPlugin
 
 	//===========================================================================
 
 	if ("function" === typeof define) {
 		define(function(require) {
-			return FeedMe;
+			return MyPlugin;
 		});
 	} else {
-		window.FeedMe = FeedMe;
+		window.MyPlugin = MyPlugin;
 	}
 
 }(window));
