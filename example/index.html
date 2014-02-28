@@ -7,18 +7,21 @@
 	<body>
 		<script type="text/javascript">
 
+			var myOptions = {foo: 'bar'};
 			var callback = function(data) {
-				console.log('all done!', 'data: ', data);
+				console.log('init done!', 'options are now: ', data);
 			};
 
-			MyPlugin.init({foo: 'bar'}, callback);
+			MyPlugin.init(myOptions, callback);
 
+			/////
 
-			MyPlugin.on('shout', function() {
-				console.log('callback for shout');
-			});
+			var callbackForShout = function() {
+				console.log('hello from shout callback');
+			};
 
-			//execute shout
+			MyPlugin.on('shout', callbackForShout);
+
 			MyPlugin.shout();
 
 		</script>

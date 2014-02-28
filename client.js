@@ -2,6 +2,7 @@
 
 	var MyPlugin = {
 
+		handlers: {},
 		options: {
 			foo: 'foo'
 		},
@@ -13,82 +14,50 @@
 		init: function(options, callback) {
 			options = this._extend(this.options, options);
 
-			console.log(options);
+			// do stuff
 
 			callback(options);
-
-			// this.callbackStyler = callbackStyler
-			// connect to api
-			// if succesfull then registerWebSocketHandle(this.refresh)
 		},
 
-		//so we expose a shout function
-		shout: function() {
-
-			console.log('shout');
-
-			//now we execute callbacks registered to shout
-			this._executeHandlers('shout');
-		},
-
-		//		registerWebSocketHandle: function(callback) {
-		//			create webscoket connection
-		//			on.('data', callback(data));
-		//		},
-
-		//		registerAJAXHandle: function(callback) {
-		//			create webSocket connection
-		//			on.('data', callback(data));
-		//		},
-
-		//		refresh: function(data) {
-		//			this.callbackStyler(data);
-		//		},
-
-		/////////////////////////////////////////////////
-		/////////////////////////////////////////////////
-		/////////////////////////////////////////////////
-
-		//handler cache
-		handlers: {},
-
-		//our on function which collects handlers
+		// on function which collects handlers
 		on: function(eventName, handler) {
-			//if no handler collection exists, create one
+			// if no handler collection exists, create one
 			if (!this.handlers[eventName]) {
 				this.handlers[eventName] = [];
 			}
 			this.handlers[eventName].push(handler);
 		},
 
-		//our internal function that executes handlers with a given name
+		//so we expose a shout function
+		shout: function() {
+
+			console.log('hello from shout');
+
+			this._executeHandlers('shout');
+		},
+
+		// internal function that executes handlers with a given name
 		_executeHandlers: function(eventName) {
-			//get all handlers with the selected name
+			// get all handlers with the selected name
 			var handler = this.handlers[eventName] || []
 				, len = handler.length
 				, i;
-			//execute each
+			// execute each
 			for (i = 0; i < len; i++) {
-				//you can use apply to specify what "this" and parameters the callback gets
+				// use apply to specify what "this" and parameters the callback gets
 				handler[i].apply(this, []);
 			}
 		},
 
-		/////////////////////////////////////////////////
-		/////////////////////////////////////////////////
-		/////////////////////////////////////////////////
-
-
-		// Helper
-		////////////////////////////////////////////////
-
-		// merge objects into new object
+		// Helpers
+		// =======
 
 		/**
 		 * @param {Object} a
 		 * @param {Object} b
 		 * @returns {Object}
 		 * @private
+		 * merge objects into new object
 		 */
 		_extend: function(a, b) {
 			var c = {}, prop;
@@ -107,7 +76,7 @@
 
 	}; // MyPlugin
 
-	//===========================================================================
+	// ===========================================================================
 
 	if ("function" === typeof define) {
 		define(function(require) {
