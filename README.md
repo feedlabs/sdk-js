@@ -28,3 +28,6 @@ describe the workflow
 - reload
 - ...
 
+# License
+
+MIT
