@@ -4,21 +4,29 @@
 
 (function(window) {
   var FeedPlugin = {
-    objectList: {},
-    outputContainer: null,
-    options: {
-      outputContainerId: 'defaultContainerId'
-    },
 
-    reference: null,
+    /** @type {Object} */
+    objectList: {},
+
+    /** @type {Array} */
+    defaultEntryIds: [],
+
+    /** @type {HTMLElement|Null} */
+    outputContainer: null,
+
+    /** @type {Object} */
+    options: {
+      outputContainerId: 'defaultContainerId',
+      defaultElementLayout: '',
+      defaultElementCount: 0
+    },
 
     /**
      * @param {Object|Null} options
      * @param {Function|Null} stylerFunction
      * @param {Function|Null} updateFunction
-     * @param {Object|Null} defaultData
      */
-    init: function(options, stylerFunction, updateFunction, defaultData) {
+    init: function(options, stylerFunction, updateFunction) {
       this.options = this._extend(this.options, options);
 
       this._stylerFunction = stylerFunction || this._stylerFunction;
@@ -26,18 +34,51 @@
 
       this.outputContainer = document.getElementById(this.options.outputContainerId);
 
-      // process default data
+      this._addDefaultEntries();
+
       var _this = this;
-      defaultData = defaultData || null;
-      if (null !== defaultData) {
-        defaultData.forEach(function(data) {
-          _this.processData(data);
+      setTimeout(function() {
+        FeedPlugin.load('http://www.feed.dev/json/last-entries', function(httpRequest) {
+          _this._loadFirstEntries(JSON.parse(httpRequest.responseText));
         });
+      }, 3000);
+    },
+
+    /**
+     * @param {Array} firstEntries
+     */
+    _loadFirstEntries: function(firstEntries) {
+      var _this = this;
+      firstEntries.forEach(function(data) {
+        _this.processData(data);
+      });
+
+      this._removeDefaultEntries();
+    },
+
+    _addDefaultEntries: function() {
+      for (var i = 1; i <= this.options.defaultElementCount; i++) {
+        var objectId = this._uniqueId();
+        var entry = document.createElement('div');
+        entry.id = objectId;
+        entry.innerHTML = this.options.defaultElementLayout;
+        this.outputContainer.appendChild(entry);
+
+        this.defaultEntryIds.push(objectId);
       }
     },
 
+    _removeDefaultEntries: function() {
+      this.defaultEntryIds.forEach(function(id) {
+        var domObject = document.getElementById(id);
+        domObject.remove();
+      });
+    },
+
+    /**
+     * @param {Object} data
+     */
     processData: function(data) {
-      //debugger;
       if (data.action == 'add') {
         this.add(data.clientData);
       } else if (data.action == 'remove') {
@@ -55,8 +96,8 @@
 
       var object = {
         id: objectId,
-        clientId: clientData.id,
-        hoverTime: 0
+        clientId: clientData.id
+        //hoverTime: 0
       };
 
       this.objectList[objectId] = object;
@@ -79,7 +120,7 @@
      * @param {Object} clientData
      */
     remove: function(clientData) {
-      var object = this.getObjectByCustId(clientData.id);
+      var object = this.getObjectByClientId(clientData.id);
       var domObject = document.getElementById(object.id);
       // domObject.removeEventListener('mouseover', this._onMouseover, true);
       // domObject.removeEventListener('mouseout', this._onMouseout, true);
@@ -91,18 +132,26 @@
      * @param {Object} clientData
      */
     update: function(clientData) {
-      var object = this.getObjectByCustId(clientData.id);
+      var object = this.getObjectByClientId(clientData.id);
       this._updateFunction(object.id, clientData);
     },
 
     /**
      * @param {String} id
+     * @returns {Object|Null}
      */
     getObjectById: function(id) {
-      return this.objectList[id];
+      if (undefined !== this.objectList[id]) {
+        return this.objectList[id];
+      }
+      return null;
     },
 
-    getObjectByCustId: function(id) {
+    /**
+     * @param {String} id
+     * @returns {Object|Null}
+     */
+    getObjectByClientId: function(id) {
       for (var key in this.objectList) {
         if (this.objectList.hasOwnProperty(key)) {
           var object = this.objectList[key];
@@ -114,20 +163,20 @@
       return null;
     },
 
-    _onMouseover: function(event) {
-      var object = FeedPlugin.getObjectById(event.target.id);
-      object['mouseover'] = new Date().getTime();
-    },
-
-    _onMouseout: function(event) {
-      var object = FeedPlugin.getObjectById(event.target.id);
-      if (object.hasOwnProperty('mouseover')) {
-        var hoverTime = new Date().getTime() - object['mouseover'];
-        object.hoverTime += hoverTime;
-        console.log('"' + object.clientId + '" hover time: ' + hoverTime + '. Total hover time: ' + object.hoverTime);
-        delete object['mouseover'];
-      }
-    },
+    //_onMouseover: function(event) {
+    //  var object = FeedPlugin.getObjectById(event.target.id);
+    //  object['mouseover'] = new Date().getTime();
+    //},
+    //
+    //_onMouseout: function(event) {
+    //  var object = FeedPlugin.getObjectById(event.target.id);
+    //  if (object.hasOwnProperty('mouseover')) {
+    //    var hoverTime = new Date().getTime() - object['mouseover'];
+    //    object.hoverTime += hoverTime;
+    //    console.log('"' + object.clientId + '" hover time: ' + hoverTime + '. Total hover time: ' + object.hoverTime);
+    //    delete object['mouseover'];
+    //  }
+    //},
 
     /**
      * @param {Object} data
@@ -147,7 +196,6 @@
       console.log(data);
       return '';
     },
-
 
     // Helpers
     // =======
@@ -174,6 +222,38 @@
 
     _uniqueId: function() {
       return '_' + Math.random().toString(36).substr(2, 9);
+    },
+
+
+    load: function(url, callback) {
+      var xhr;
+      if (typeof XMLHttpRequest !== 'undefined') {
+        xhr = new XMLHttpRequest();
+      } else {
+        var versions = ["MSXML2.XmlHttp.5.0", "MSXML2.XmlHttp.4.0", "MSXML2.XmlHttp.3.0", "MSXML2.XmlHttp.2.0", "Microsoft.XmlHttp"];
+        for (var i = 0, len = versions.length; i < len; i++) {
+          try {
+            xhr = new ActiveXObject(versions[i]);
+            break;
+          }
+          catch (e) {
+          }
+        }
+      }
+      xhr.onreadystatechange = ensureReadiness;
+      function ensureReadiness() {
+        if (xhr.readyState < 4) {
+          return;
+        }
+        if (xhr.status !== 200) {
+          return;
+        }
+        if (xhr.readyState === 4) {
+          callback(xhr);
+        }
+      }
+      xhr.open('GET', url, true);
+      xhr.send('');
     }
 
   }; // FeedPlugin
