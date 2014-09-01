@@ -21,15 +21,6 @@ describe the workflow
 - get time line
 - print time line items
 
-### Methods
-
-- init
-- connect
-- style
-- print
-- reload
-- ...
-
 # License
 
 MIT
