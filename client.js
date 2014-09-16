@@ -16,6 +16,7 @@
 
     /** @type {Object} */
     options: {
+      feedId: '',
       outputContainerId: 'defaultContainerId',
       defaultElementLayout: '',
       defaultElementCount: 0
@@ -38,7 +39,7 @@
 
       var _this = this;
       setTimeout(function() {
-        FeedPlugin.load('http://www.feed.dev/json/last-entries', function(httpRequest) {
+        FeedPlugin.load('http://www.feed.dev:10111/v1/feed/' + _this.options.feedId + '/entry', function(httpRequest) {
           _this._loadFirstEntries(JSON.parse(httpRequest.responseText));
         });
       }, 3000);
@@ -49,11 +50,19 @@
      */
     _loadFirstEntries: function(firstEntries) {
       var _this = this;
-      firstEntries.forEach(function(data) {
-        _this.processData(data);
-      });
-
+      for (var key in firstEntries) {
+        if (firstEntries.hasOwnProperty(key)) {
+          var data = firstEntries[key];
+          var realData = this._helperToGetRealData(data);
+          _this.processData(realData);
+        }
+      }
       this._removeDefaultEntries();
+    },
+
+    _helperToGetRealData: function(data) {
+      var realData = JSON.parse(data.Data);
+      return realData['data']['data'];
     },
 
     _addDefaultEntries: function() {
@@ -79,6 +88,7 @@
      * @param {Object} data
      */
     processData: function(data) {
+      //debugger;
       if (data.action == 'add') {
         this.add(data.clientData);
       } else if (data.action == 'remove') {
@@ -94,13 +104,11 @@
     add: function(clientData) {
       var objectId = this._uniqueId();
 
-      var object = {
+      this.objectList[objectId] = {
         id: objectId,
         clientId: clientData.id
         //hoverTime: 0
       };
-
-      this.objectList[objectId] = object;
 
       // create new DOM object
       var element = document.createElement('div');
@@ -252,6 +260,7 @@
           callback(xhr);
         }
       }
+
       xhr.open('GET', url, true);
       xhr.send('');
     }

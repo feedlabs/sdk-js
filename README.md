@@ -21,6 +21,7 @@ describe the workflow
 - get time line
 - print time line items
 
-# License
+License
+-------
 
 MIT
