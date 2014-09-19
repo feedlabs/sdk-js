@@ -53,7 +53,7 @@
       for (var key in firstEntries) {
         if (firstEntries.hasOwnProperty(key)) {
           var data = firstEntries[key];
-          var realData = this._helperToGetRealData(data);
+          var realData = JSON.parse(data.Data);
           _this.processData(realData);
         }
       }
@@ -88,14 +88,14 @@
      * @param {Object} data
      */
     processData: function(data) {
-      //debugger;
-      if (data.action == 'add') {
-        this.add(data.clientData);
-      } else if (data.action == 'remove') {
-        this.remove(data.clientData);
-      } else if (data.action == 'update') {
-        this.update(data.clientData);
-      }
+      this.add(data);
+      //if (data.action == 'add') {
+      //  this.add(data.clientData);
+      //} else if (data.action == 'remove') {
+      //  this.remove(data.clientData);
+      //} else if (data.action == 'update') {
+      //  this.update(data.clientData);
+      //}
     },
 
     /**
