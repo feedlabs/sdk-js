@@ -1,0 +1,37 @@
+{
+  "name": "feedlabs-sdk-js",
+  "description": "This is the js sdk for products of Feed Labs",
+  "version": "0.0.1",
+  "type": "library",
+  "keywords": [
+    "Feed Labs",
+    "feedlabs",
+    "feedify",
+    "sdk"
+  ],
+  "homepage": "http://www.feedlabs.io",
+  "bugs": {
+    "url": "https://github.com/feedlabs/sdk-php/issues",
+    "email": "hello@feedlabs.io"
+  },
+  "dependencies": {
+    "gulp": "3.8.8",
+    "gulp-concat": "2.4.1",
+    "gulp-uglify": "1.0.1",
+    "gulp-jshint": "1.8.5",
+    "gulp-rename": "1.2.0",
+    "gulp-notify": "2.0.0",
+    "gulp-header":"1.1.1",
+    "del": "0.1.3"
+  },
+  "directories": {
+    "test": "test",
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/feedlabs/sdk-js.git"
+  },
+  "author": "Marian Sollmann <marian@feedlabs.io> (https://github.com/mariansollmann)",
+  "license": "MIT"
+}
