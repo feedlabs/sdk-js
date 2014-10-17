@@ -14,14 +14,15 @@
     "url": "https://github.com/feedlabs/sdk-php/issues",
     "email": "hello@feedlabs.io"
   },
-  "dependencies": {
+  "devDependencies": {
     "gulp": "3.8.8",
     "gulp-concat": "2.4.1",
     "gulp-uglify": "1.0.1",
     "gulp-jshint": "1.8.5",
     "gulp-rename": "1.2.0",
     "gulp-notify": "2.0.0",
-    "gulp-header":"1.1.1",
+    "gulp-header": "1.1.1",
+    "gulp-jsdoc": "0.1.4",
     "del": "0.1.3"
   },
   "directories": {

@@ -5,15 +5,16 @@ var jshint = require('gulp-jshint');
 var rename = require('gulp-rename');
 var notify = require('gulp-notify');
 var header = require('gulp-header');
+var jsdoc = require("gulp-jsdoc");
 var del = require('del');
 var pkg = require('./package.json');
 
 var scripts = [
-  'src/intro.js',
-  'src/main.js',
-  'src/modules/*.js',
-  'src/init.js',
-  'src/outro.js'
+  './src/intro.js',
+  './src/main.js',
+  './src/modules/*.js',
+  './src/init.js',
+  './src/outro.js'
 ];
 
 var banner = ['/**',
@@ -24,23 +25,26 @@ var banner = ['/**',
   ' */\n',
   ''].join('\n');
 
-gulp.task('scripts', function() {
+gulp.task('clean', function(cb) {
+  del(['dist/*', 'doc/*'], cb);
+});
+
+gulp.task('scripts', ['clean'], function() {
   return gulp.src(scripts)
     .pipe(concat('feedify.js'))
     .pipe(header(banner, {pkg: pkg}))
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'))
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('./dist'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('./dist'))
     .pipe(notify({message: 'Scripts task complete'}));
 });
 
-gulp.task('clean', function(cb) {
-  del(['dist'], cb);
+gulp.task('doc', ['scripts'], function() {
+  return gulp.src("dist/feedify.js")
+    .pipe(jsdoc('doc'))
 });
 
-gulp.task('default', ['clean'], function() {
-  gulp.start('scripts');
-});
+gulp.task('default', ['doc']);
