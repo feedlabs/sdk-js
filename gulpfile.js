@@ -8,6 +8,7 @@ var header = require('gulp-header');
 var jsdoc = require("gulp-jsdoc");
 var del = require('del');
 var pkg = require('./package.json');
+var qunit = require('gulp-qunit');
 
 var scripts = [
   './src/intro.js',
@@ -26,7 +27,7 @@ var banner = ['/**',
   ''].join('\n');
 
 gulp.task('clean', function(cb) {
-  del(['dist/*', 'doc/*'], cb);
+  del(['./dist/*', './doc/*'], cb);
 });
 
 gulp.task('scripts', ['clean'], function() {
@@ -44,7 +45,12 @@ gulp.task('scripts', ['clean'], function() {
 
 gulp.task('doc', ['scripts'], function() {
   return gulp.src("dist/feedify.js")
-    .pipe(jsdoc('doc'))
+    .pipe(jsdoc('./doc'))
+});
+
+gulp.task('test', function () {
+  return gulp.src('./test/index.html')
+    .pipe(qunit());
 });
 
 gulp.task('default', ['doc']);
