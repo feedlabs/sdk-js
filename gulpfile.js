@@ -8,12 +8,13 @@ var header = require('gulp-header');
 var del = require('del');
 var pkg = require('./package.json');
 
-//var scripts = [
-//  'src/1-intro.js',
-//  'src/2-plugin.js',
-//  'src/3-init.js',
-//  'src/4-outro.js',
-//];
+var scripts = [
+  'src/intro.js',
+  'src/main.js',
+  'src/modules/*.js',
+  'src/init.js',
+  'src/outro.js'
+];
 
 var banner = ['/**',
   ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -25,10 +26,10 @@ var banner = ['/**',
 
 gulp.task('scripts', function() {
   return gulp.src(scripts)
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('default'))
     .pipe(concat('feedify.js'))
     .pipe(header(banner, {pkg: pkg}))
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('default'))
     .pipe(gulp.dest('dist'))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
@@ -40,6 +41,6 @@ gulp.task('clean', function(cb) {
   del(['dist'], cb);
 });
 
-//gulp.task('default', ['clean'], function() {
-  //gulp.start('scripts');
-//});
+gulp.task('default', ['clean'], function() {
+  gulp.start('scripts');
+});
