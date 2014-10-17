@@ -1,7 +1,7 @@
-if ("function" === typeof define) {
-  define(function() {
+if ( typeof define === "function" && define.amd ) {
+  define( function () {
     return FeedPlugin;
   });
 } else {
-  window.FeedPlugin = FeedPlugin;
+  global.FeedPlugin = FeedPlugin;
 }

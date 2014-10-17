@@ -1,1 +1,3 @@
-;(function(window) {
+;(function( global ) {
+
+  "use strict";

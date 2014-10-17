@@ -1,5 +1,6 @@
 /**
- * @returns {SocketRedisClient}
+ * @returns {FeedPlugin.SocketRedisClient}
+ * @memberof FeedPlugin
  */
 FeedPlugin.prototype.getSocketRedisClient = function() {
   if (typeof window.feedify === 'undefined') {
@@ -15,7 +16,8 @@ FeedPlugin.prototype.getSocketRedisClient = function() {
 
 /**
  * @param {String} url
- * @returns {SocketRedisClient}
+ * @returns {FeedPlugin.SocketRedisClient}
+ * @memberof FeedPlugin
  */
 FeedPlugin.prototype.createSocketRedisClient = function(url) {
   var sockJS;

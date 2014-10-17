@@ -5,7 +5,9 @@
  * @license MIT
  */
 
-;(function(window) {
+;(function( global ) {
+
+  "use strict";
 
 /** @type {Object} */
 var defaultOptions = {
@@ -19,7 +21,6 @@ var defaultOptions = {
 /**
  * @param {Object} options
  * @param {Function} stylerFunction
- * @returns {FeedPlugin}
  * @constructor
  */
 var FeedPlugin = function(options, stylerFunction) {
@@ -42,8 +43,6 @@ var FeedPlugin = function(options, stylerFunction) {
   this._addDefaultEntries();
   this.initFeedPage();
   this._bindToStream();
-
-  return this;
 };
 
 FeedPlugin.prototype._addDefaultEntries = function() {
@@ -221,7 +220,8 @@ FeedPlugin.prototype.remove = function(data) {
 };
 
 /**
- * @returns {SocketRedisClient}
+ * @returns {FeedPlugin.SocketRedisClient}
+ * @memberof FeedPlugin
  */
 FeedPlugin.prototype.getSocketRedisClient = function() {
   if (typeof window.feedify === 'undefined') {
@@ -237,7 +237,8 @@ FeedPlugin.prototype.getSocketRedisClient = function() {
 
 /**
  * @param {String} url
- * @returns {SocketRedisClient}
+ * @returns {FeedPlugin.SocketRedisClient}
+ * @memberof FeedPlugin
  */
 FeedPlugin.prototype.createSocketRedisClient = function(url) {
   var sockJS;
@@ -378,12 +379,12 @@ FeedPlugin.prototype._stylerFunction = function(data) {
   return data;
 };
 
-if ("function" === typeof define) {
-  define(function() {
+if ( typeof define === "function" && define.amd ) {
+  define( function () {
     return FeedPlugin;
   });
 } else {
-  window.FeedPlugin = FeedPlugin;
+  global.FeedPlugin = FeedPlugin;
 }
 
-}(window));
+}(typeof window === 'undefined' ? this : window));

@@ -10,7 +10,6 @@ var defaultOptions = {
 /**
  * @param {Object} options
  * @param {Function} stylerFunction
- * @returns {FeedPlugin}
  * @constructor
  */
 var FeedPlugin = function(options, stylerFunction) {
@@ -33,6 +32,4 @@ var FeedPlugin = function(options, stylerFunction) {
   this._addDefaultEntries();
   this.initFeedPage();
   this._bindToStream();
-
-  return this;
 };
