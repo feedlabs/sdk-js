@@ -1,27 +1,16 @@
-JS Client
-=========
+sdk-js
+======
 
-(currently in development)
+This is a javascript client for [elasticfeed](https://github.com/feedlabs/elasticfeed) server.
 
-The Javascript client will create a connection to the API "broadcaster" using individual ID's and token's.
-This ID's and token's will be generated bei the API system and related to each application registered at the API system.
+Development
+-----------
+Type `grunt watch` to produce dist files for each change.
 
-Workflow
---------
-
-describe the workflow
-
-- init client
- * id (user related)
- * token (app related)
- * styler callback function
- * container (html wrapper)
- * ...
-- register connection
-- get time line
-- print time line items
+Build
+-----
+Type `grunt` to build distribution files.
 
 License
 -------
-
 MIT
