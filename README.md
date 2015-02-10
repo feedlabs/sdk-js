@@ -5,6 +5,16 @@ This is a javascript client for [elasticfeed](https://github.com/feedlabs/elasti
 
 Elasticfeed
 -----------
+#### Global options
+```js
+{
+  channel: {
+    url: 'localhost',
+    transport: 'ws'
+  }
+}
+```
+
 #### Init
 ```js
 elasticfeed.init({
@@ -24,6 +34,16 @@ var feed = elasticfeed.initFeed('84:30:26', {
   }
 });
 ```
+
+#### Methods
+##### initFeed(id, options)
+Creates and returns `feed` instance (creates new `channel` if required).
+##### getChannel(options)
+Creates and returns `channel` instance.
+##### findFeed(id)
+Returns existing `feed` instance or `false` if does not exist.
+##### findChannel(url)
+Returns existing `channel` instance or `false` if does not exist.
 
 Channel
 -------
