@@ -10,7 +10,7 @@ Elasticfeed
 {
   channel: {
     url: 'localhost',
-    transport: 'ws'
+    transport: '[ws|lp|see]'
   }
 }
 ```
@@ -95,18 +95,18 @@ feed.on('logout', function(timestamp) {});
 ```
 
 #### Methods
-###### addEntry(entry)
-###### deleteEntry(entry)
-###### updateEntry(entry, data)
-###### loadInit()
+##### addEntry(entry)
+##### deleteEntry(entry)
+##### updateEntry(entry, data)
+##### loadInit()
 Sends request to the server
-###### loadMore()
+##### loadMore()
 Sends request to the server
-###### reload()
+##### reload()
 Empty feed and trigger initial load.
-###### empty()
+##### empty()
 Removes entries from feed and DOM
-###### render()
+##### render()
 Refresh entries in the DOM.
 
 Entry
@@ -125,13 +125,13 @@ entry.on('show', function(timestamp) {});
 ```
 
 #### Methods
-###### setParent(feed)
+##### setParent(feed)
 Set parent of type feed and binds to the messages stream on the feed.
-###### bindMessages()
+##### bindMessages()
 Bind to the event `entry-message` on the parent feed object. 
-###### unbindMessages()
+##### unbindMessages()
 Unbind from the event `entry-message`.
-###### render()
+##### render()
 Refresh object in the DOM.
 
 Event
