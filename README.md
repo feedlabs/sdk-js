@@ -27,13 +27,15 @@ var feed = elasticfeed.initFeed('84:30:26', {
 
 Channel
 -------
+Supports three types of communication over `HTTP` protocol: WebSocket, Long pooling (XHR), SSE (Server Sent Events + XHR).
+
 #### Options
 ```js
 {
-    id: null,
     transport: 'ws',
     host: 'localhost',
     port: '10100'
+    url: ''
 }
 ```
 
@@ -72,6 +74,17 @@ feed.on('authentication-failed', function(timestamp) {});
 feed.on('logout', function(timestamp) {});
 ```
 
+#### Methods
+##### addEntry(entry)
+##### deleteEntry(entry)
+##### updateEntry(entry, data)
+##### updateEntry(entry, data)
+##### loadInit() will send request to the server
+##### loadMore() will send request to the server
+##### reload() will empty feed and trigger initial load.
+##### empty() will remove entries from feed and DOM
+##### render() will refresh entries in the DOM.
+
 Entry
 -----
 #### Create
@@ -86,6 +99,9 @@ entry.on('delete', function(timestamp) {});
 entry.on('hide', function(timestamp) {});
 entry.on('show', function(timestamp) {});
 ```
+
+#### Methods
+##### render() will refresh object in the DOM.
 
 Event
 -----
