@@ -75,15 +75,20 @@ feed.on('logout', function(timestamp) {});
 ```
 
 #### Methods
-##### addEntry(entry)
-##### deleteEntry(entry)
-##### updateEntry(entry, data)
-##### updateEntry(entry, data)
-##### loadInit() will send request to the server
-##### loadMore() will send request to the server
-##### reload() will empty feed and trigger initial load.
-##### empty() will remove entries from feed and DOM
-##### render() will refresh entries in the DOM.
+###### addEntry(entry)
+###### deleteEntry(entry)
+###### updateEntry(entry, data)
+###### updateEntry(entry, data)
+###### loadInit()
+Sends request to the server
+###### loadMore()
+Sends request to the server
+###### reload()
+Empty feed and trigger initial load.
+###### empty()
+Removes entries from feed and DOM
+###### render()
+Refresh entries in the DOM.
 
 Entry
 -----
@@ -101,7 +106,8 @@ entry.on('show', function(timestamp) {});
 ```
 
 #### Methods
-##### render() will refresh object in the DOM.
+###### render()
+Refresh object in the DOM.
 
 Event
 -----
