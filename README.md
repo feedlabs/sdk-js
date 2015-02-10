@@ -128,9 +128,9 @@ entry.on('show', function(timestamp) {});
 
 #### Methods
 ##### setParent(feed)
-Set parent of type feed and binds to the messages stream on the feed.
+Set parent of type `feed` and binds to the messages stream on the `feed` instance.
 ##### bindMessages()
-Bind to the `entry-message` event on the parent feed object. 
+Bind to the `entry-message` event on the parent `feed` instance. 
 ##### unbindMessages()
 Unbind from the `entry-message` event.
 ##### render()
