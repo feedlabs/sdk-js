@@ -78,7 +78,6 @@ feed.on('logout', function(timestamp) {});
 ###### addEntry(entry)
 ###### deleteEntry(entry)
 ###### updateEntry(entry, data)
-###### updateEntry(entry, data)
 ###### loadInit()
 Sends request to the server
 ###### loadMore()
