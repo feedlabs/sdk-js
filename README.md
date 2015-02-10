@@ -108,6 +108,8 @@ Empty feed and trigger initial load.
 Removes entries from feed and DOM
 ##### render()
 Refresh entries in the DOM.
+##### bindChannel()
+Bind to the `message` event on the `channel` instance.
 
 Entry
 -----
@@ -128,9 +130,9 @@ entry.on('show', function(timestamp) {});
 ##### setParent(feed)
 Set parent of type feed and binds to the messages stream on the feed.
 ##### bindMessages()
-Bind to the event `entry-message` on the parent feed object. 
+Bind to the `entry-message` event on the parent feed object. 
 ##### unbindMessages()
-Unbind from the event `entry-message`.
+Unbind from the `entry-message` event.
 ##### render()
 Refresh object in the DOM.
 
