@@ -23,6 +23,7 @@ var Channel = (function() {
     /** @type {String} */
     this.url = null;
 
+    /** @type {String} */
     defaultOptions.url = defaultOptions.transport + '://' + defaultOptions.host + ':' + defaultOptions.port + defaultOptions.path_ws
 
     /** @type {Object} */

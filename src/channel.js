@@ -7,7 +7,6 @@ var Channel = (function() {
   var defaultOptions = {
     id: null,
     transport: 'ws',
-    connectOnInit: true,
     host: 'localhost',
     port: '10100',
     path_ws: '/stream/ws',
