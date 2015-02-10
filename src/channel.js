@@ -7,7 +7,12 @@ var Channel = (function() {
   var defaultOptions = {
     id: null,
     transport: 'ws',
-    connectOnInit: true
+    connectOnInit: true,
+    host: 'localhost',
+    port: '10100',
+    path_ws: '/stream/ws',
+    path_lp: '/stream/lp',
+    path_sse: '/stream/sse'
   };
 
   function Channel(options) {
@@ -17,6 +22,9 @@ var Channel = (function() {
 
     /** @type {String} */
     this.url = null;
+
+    /** @type {String} */
+    defaultOptions.url = defaultOptions.transport + '://' + defaultOptions.host + ':' + defaultOptions.port + defaultOptions.path_ws
 
     /** @type {Object} */
     this.options = _extend(defaultOptions, options);
@@ -117,7 +125,7 @@ var Channel = (function() {
     var self = this;
 
     if (this._socket === null) {
-      this._socket = new WebSocket('ws://localhost:10100/stream/ws/join?chid=' + this.id);
+      this._socket = new WebSocket(this.url + '/join?chid=' + this.id);
 
       this._socket.onmessage = function(event) {
         event = new Event(JSON.parse(event.data));
@@ -140,7 +148,7 @@ var Channel = (function() {
       var lastReceived = 0;
       var isWait = false;
 
-      this.getJSON('http://localhost:10100/stream/lp/join?chid=' + this.id, function(data) {
+      this.getJSON(this.url + '/join?chid=' + this.id, function(data) {
         if (data === null) {
           return;
         }
@@ -153,7 +161,7 @@ var Channel = (function() {
           return;
         }
         isWait = true;
-        self.getJSON("http://localhost:10100/stream/lp/fetch?lastReceived=" + lastReceived, function(data, code) {
+        self.getJSON(self.url + '/fetch?lastReceived=' + lastReceived, function(data, code) {
 
           if (code == 4) {
             isWait = false;
@@ -179,7 +187,7 @@ var Channel = (function() {
 
     return {
       send: function(data) {
-        self.post("/stream/lp/post", {chid: self.id, data: JSON.stringify(data)}, function(data) {
+        self.post(self.url + '/post', {chid: self.id, data: JSON.stringify(data)}, function(data) {
           response_json = JSON.parse(data);
           event = new Event(JSON.parse(response_json.response));
           self.onData(event);
@@ -190,7 +198,7 @@ var Channel = (function() {
 
   Channel.prototype.getSSEConnection = function() {
 
-    es = new EventSource("http://localhost:8001/stream/sse/join");
+    es = new EventSource(this.url + '/join');
     es.onmessage = function(event) {
     };
 
@@ -199,7 +207,7 @@ var Channel = (function() {
 
     return {
       send: function(data) {
-        self.post("/stream/sse/post", {chid: self.id, data: JSON.stringify(data)}, function(data) {
+        self.post(this.url + '/post', {chid: self.id, data: JSON.stringify(data)}, function(data) {
           response_json = JSON.parse(data);
           event = new Event(JSON.parse(response_json.response));
           self.onData(event);
