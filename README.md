@@ -10,7 +10,7 @@ Elasticfeed
 {
   channel: {
     url: 'localhost',
-    transport: '[ws|lp|see]'
+    transport: '[ws|lp|sse]'
   }
 }
 ```
