@@ -21,6 +21,9 @@
     /** @type {Object} */
     feedList: {},
 
+    /** @type {Object} */
+    metricProviderList: {},
+
     init: function(options) {
       this.options = _extend(defaultOptions, options);
     },
@@ -34,10 +37,31 @@
         opts = _extend(this.options, options || {});
         channel = this.getChannel(opts.channel);
 
-        this.feedList[id] = new Feed(id, opts, channel);
+        if (opts.metric === undefined) {
+          opts.metric = opts.channel;
+        }
+
+        metricProvider = this.getMetricProvider(opts.metric)
+
+        this.feedList[id] = new Feed(id, opts, channel, metricProvider);
       }
 
       return this.feedList[id];
+    },
+
+    getMetricProvider: function(options) {
+      if (options.url === undefined) {
+        return false;
+      }
+
+      if (this.metricProviderList[options.url] === undefined) {
+        opts = _extend(this.options, options || {});
+        channel = this.getChannel(options);
+
+        this.metricProviderList[options.url] = new Metric(opts, channel);
+      }
+
+      return this.metricProviderList[options.url];
     },
 
     /**

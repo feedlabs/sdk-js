@@ -44,7 +44,7 @@ var Feed = (function() {
     method: 'basic'
   };
 
-  function Feed(id, options, channel) {
+  function Feed(id, options, channel, metricProvider) {
 
     /** @type {String} */
     this.id = id;
@@ -60,6 +60,9 @@ var Feed = (function() {
 
     /** @type {Channel} */
     this.channel = channel;
+
+    /** @type {Metric} */
+    this.metricProvider = metricProvider;
 
     /** @type {Array} */
     this.entryList = [];
@@ -305,6 +308,17 @@ var Feed = (function() {
       self._state.initiated = true;
     });
   };
+
+  Feed.prototype.pageNext = function() {
+  }
+
+  Feed.prototype.pageBack = function() {
+  }
+
+  Feed.prototype.DetectEntryVisibility = function() {
+    // track entry visibility
+    // register order, speed, returns, hovering
+  }
 
   // Entries management
 
