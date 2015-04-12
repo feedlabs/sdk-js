@@ -37,7 +37,9 @@ var Feed = (function() {
     /** @type {Function} */
     loadingSpinner: function() {
       return null;
-    }
+    },
+
+    entriesPerPage: 48
 
   };
 
@@ -324,19 +326,33 @@ var Feed = (function() {
 
   Feed.prototype.pageNext = function() {
     if (this.loadingMode == "pagination") {
-      // do action
+      if (this.getCurrentPage() < this.getPageCount()) {
+        this.pageJump(this.getCurrentPage() + 1)
+      } else {
+        // trigger onLastPage()
+      }
     } else {
       this.loadMore();
     }
   }
 
   Feed.prototype.pageBack = function() {
+    if (this.getCurrentPage() > 1) {
+      this.pageJump(this.getCurrentPage() - 1)
+    } else {
+      // trigger onFirstPage()
+    }
   }
 
   Feed.prototype.pageFirst = function() {
+    this.pageJump(1);
   }
 
   Feed.prototype.pageLast = function() {
+    this.pageJump(this.getPageCount());
+  }
+
+  Feed.prototype.pageJump = function(number) {
   }
 
   Feed.prototype.insertFilters = function(filters) {
@@ -349,9 +365,16 @@ var Feed = (function() {
   Feed.prototype.resetFilters = function(filters) {
   }
 
-  Feed.prototype.DetectEntryVisibility = function() {
-    // track entry visibility
-    // register order, speed, returns, hovering
+  // State management
+
+  Feed.prototype.getPageCount = function() {
+  }
+
+  Feed.prototype.getCurrentPage = function() {
+  }
+
+  Feed.prototype.setEntriesPerPage = function(number) {
+    this.entriesPerPage = number;
   }
 
   // Entries management
