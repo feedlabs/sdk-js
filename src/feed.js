@@ -29,7 +29,16 @@ var Feed = (function() {
     /** @type {Function} */
     renderFunction: function(data) {
       return JSON.stringify(data);
+    },
+
+    /** @type {String} */
+    loadingMode: "pagination|infinite",
+
+    /** @type {Function} */
+    loadingSpinner: function() {
+      return null;
     }
+
   };
 
   var globalCredential = {
@@ -293,10 +302,6 @@ var Feed = (function() {
     this.socket.send({action: ENTRY_INIT, feedId: this.feedId, appId: this.appId, orgId: this.orgId});
   };
 
-  Feed.prototype.loadMore = function() {
-    this.socket.send({action: ENTRY_MORE, feedId: this.feedId, appId: this.appId, orgId: this.orgId, state: {}});
-  };
-
   Feed.prototype.loadInit = function() {
     var self = this;
     this.channel.on('join', function() {
@@ -309,10 +314,39 @@ var Feed = (function() {
     });
   };
 
+  Feed.prototype.loadMore = function() {
+    if (this.loadingMode == "infinite") {
+      this.socket.send({action: ENTRY_MORE, feedId: this.feedId, appId: this.appId, orgId: this.orgId, state: {}});
+    } else {
+      this.pageNext();
+    }
+  };
+
   Feed.prototype.pageNext = function() {
+    if (this.loadingMode == "pagination") {
+      // do action
+    } else {
+      this.loadMore();
+    }
   }
 
   Feed.prototype.pageBack = function() {
+  }
+
+  Feed.prototype.pageFirst = function() {
+  }
+
+  Feed.prototype.pageLast = function() {
+  }
+
+  Feed.prototype.insertFilters = function(filters) {
+    // used for searching/filtering
+  }
+
+  Feed.prototype.removeFilters = function(filters) {
+  }
+
+  Feed.prototype.resetFilters = function(filters) {
   }
 
   Feed.prototype.DetectEntryVisibility = function() {
@@ -324,13 +358,20 @@ var Feed = (function() {
 
   Feed.prototype.addEntry = function(entry) {
 
+    // TO DO
     // types
     // add by: timestamp up/down; always to top; always to bottom
 
     entry.setParent(this);
     this.entryList.push(entry);
 
+    // TO DO
+    // event onBeforeEntryInsert()
+
     this.outputContainer.innerHTML = '<div id="' + entry.getViewId() + '"></div>' + this.outputContainer.innerHTML;
+
+    // TO DO
+    // event onAfterEntryInsert()
 
     entry.render();
   };
