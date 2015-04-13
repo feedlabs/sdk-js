@@ -35,11 +35,24 @@ var Feed = (function() {
     loadingMode: "pagination|infinite",
 
     /** @type {Function} */
-    loadingSpinner: function() {
+    loadingSpinner: function(action) {
+      actions = ['init-load', 'load-more', 'page-next', 'page-back']
       return null;
     },
 
-    entriesPerPage: 48
+    entriesPerPage: 48,
+
+    audience: [
+      {
+        id: null,
+        birth: null,
+        gender: null,
+        height: null,
+        weight: null,
+        title: null,
+        salary: null
+      }
+    ]
 
   };
 
