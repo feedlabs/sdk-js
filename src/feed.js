@@ -40,6 +40,11 @@ var Feed = (function() {
       return null;
     },
 
+    // preload entries for next/previous page
+    /** @type {Integer} */
+    preLoadBuffer: 48,
+
+    /** @type {Integer} */
     entriesPerPage: 48,
 
     audience: [
