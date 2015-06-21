@@ -22,6 +22,9 @@
     feedList: {},
 
     /** @type {Object} */
+    viewerList: {},
+
+    /** @type {Object} */
     metricProviderList: {},
 
     init: function(options) {
@@ -82,6 +85,24 @@
       return this.channelList[options.url];
     },
 
+    /**
+     * Returns Viewer defined per UID
+     * @param profile
+     * @param options
+     * @returns {*}
+     */
+    getViewer: function(profile, options) {
+      if (profile.uid === undefined) {
+        return false;
+      }
+
+      if (this.viewerList[profile.uid] === undefined) {
+        this.viewerList[profile.uid] = new Viewer(profile, options);
+      }
+
+      return this.viewerList[profile.uid];
+    },
+
     findFeed: function(id) {
       if (this.feedList[id] === undefined) {
         return false;
@@ -94,6 +115,13 @@
         return false;
       }
       return this.channelList[url];
+    },
+
+    findViewer: function(uid) {
+      if (this.viewerList[url] === undefined) {
+        return false;
+      }
+      return this.viewerList[uid];
     }
 
   };
