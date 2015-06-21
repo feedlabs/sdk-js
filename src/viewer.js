@@ -17,6 +17,14 @@ var Viewer = (function() {
 
   Viewer.prototype.InitScrollingHeatMap = function() {}
 
+  Viewer.prototype.GetIP = function() {}
+
+  Viewer.prototype.GetLocation = function() {}
+
+  Viewer.prototype.GetEnvOS = function() {}
+
+  Viewer.prototype.GetEnvBrowser = function() {}
+
   return Viewer;
 
 })();
