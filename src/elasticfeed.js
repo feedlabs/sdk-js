@@ -21,6 +21,12 @@
     /** @type {Object} */
     feedList: {},
 
+    /** @type {Object} */
+    viewerList: {},
+
+    /** @type {Object} */
+    metricProviderList: {},
+
     init: function(options) {
       this.options = _extend(defaultOptions, options);
     },
@@ -34,10 +40,31 @@
         opts = _extend(this.options, options || {});
         channel = this.getChannel(opts.channel);
 
-        this.feedList[id] = new Feed(id, opts, channel);
+        if (opts.metric === undefined) {
+          opts.metric = opts.channel;
+        }
+
+        metricProvider = this.getMetricProvider(opts.metric)
+
+        this.feedList[id] = new Feed(id, opts, channel, metricProvider);
       }
 
       return this.feedList[id];
+    },
+
+    getMetricProvider: function(options) {
+      if (options.url === undefined) {
+        return false;
+      }
+
+      if (this.metricProviderList[options.url] === undefined) {
+        opts = _extend(this.options, options || {});
+        channel = this.getChannel(options);
+
+        this.metricProviderList[options.url] = new Metric(opts, channel);
+      }
+
+      return this.metricProviderList[options.url];
     },
 
     /**
@@ -58,6 +85,24 @@
       return this.channelList[options.url];
     },
 
+    /**
+     * Returns Viewer defined per UID
+     * @param profile
+     * @param options
+     * @returns {*}
+     */
+    getViewer: function(profile, options) {
+      if (profile.uid === undefined) {
+        return false;
+      }
+
+      if (this.viewerList[profile.uid] === undefined) {
+        this.viewerList[profile.uid] = new Viewer(profile, options);
+      }
+
+      return this.viewerList[profile.uid];
+    },
+
     findFeed: function(id) {
       if (this.feedList[id] === undefined) {
         return false;
@@ -70,6 +115,13 @@
         return false;
       }
       return this.channelList[url];
+    },
+
+    findViewer: function(uid) {
+      if (this.viewerList[url] === undefined) {
+        return false;
+      }
+      return this.viewerList[uid];
     }
 
   };

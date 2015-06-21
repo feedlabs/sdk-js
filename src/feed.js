@@ -29,7 +29,36 @@ var Feed = (function() {
     /** @type {Function} */
     renderFunction: function(data) {
       return JSON.stringify(data);
-    }
+    },
+
+    /** @type {String} */
+    loadingMode: "pagination|infinite",
+
+    /** @type {Function} */
+    loadingSpinner: function(action) {
+      actions = ['init-load', 'load-more', 'page-next', 'page-back']
+      return null;
+    },
+
+    // preload entries for next/previous page
+    /** @type {Integer} */
+    preLoadBuffer: 48,
+
+    /** @type {Integer} */
+    entriesPerPage: 48,
+
+    audience: [
+      {
+        id: null,
+        birth: null,
+        gender: null,
+        height: null,
+        weight: null,
+        title: null,
+        salary: null
+      }
+    ]
+
   };
 
   var globalCredential = {
@@ -44,7 +73,7 @@ var Feed = (function() {
     method: 'basic'
   };
 
-  function Feed(id, options, channel) {
+  function Feed(id, options, channel, metricProvider) {
 
     /** @type {String} */
     this.id = id;
@@ -60,6 +89,9 @@ var Feed = (function() {
 
     /** @type {Channel} */
     this.channel = channel;
+
+    /** @type {Metric} */
+    this.metricProvider = metricProvider;
 
     /** @type {Array} */
     this.entryList = [];
@@ -290,10 +322,6 @@ var Feed = (function() {
     this.socket.send({action: ENTRY_INIT, feedId: this.feedId, appId: this.appId, orgId: this.orgId});
   };
 
-  Feed.prototype.loadMore = function() {
-    this.socket.send({action: ENTRY_MORE, feedId: this.feedId, appId: this.appId, orgId: this.orgId, state: {}});
-  };
-
   Feed.prototype.loadInit = function() {
     var self = this;
     this.channel.on('join', function() {
@@ -306,17 +334,85 @@ var Feed = (function() {
     });
   };
 
+  Feed.prototype.loadMore = function() {
+    if (this.loadingMode == "infinite") {
+      this.socket.send({action: ENTRY_MORE, feedId: this.feedId, appId: this.appId, orgId: this.orgId, state: {}});
+    } else {
+      this.pageNext();
+    }
+  };
+
+  Feed.prototype.pageNext = function() {
+    if (this.loadingMode == "pagination") {
+      if (this.getCurrentPage() < this.getPageCount()) {
+        this.pageJump(this.getCurrentPage() + 1)
+      } else {
+        // trigger onLastPage()
+      }
+    } else {
+      this.loadMore();
+    }
+  }
+
+  Feed.prototype.pageBack = function() {
+    if (this.getCurrentPage() > 1) {
+      this.pageJump(this.getCurrentPage() - 1)
+    } else {
+      // trigger onFirstPage()
+    }
+  }
+
+  Feed.prototype.pageFirst = function() {
+    this.pageJump(1);
+  }
+
+  Feed.prototype.pageLast = function() {
+    this.pageJump(this.getPageCount());
+  }
+
+  Feed.prototype.pageJump = function(number) {
+  }
+
+  Feed.prototype.insertFilters = function(filters) {
+    // used for searching/filtering
+  }
+
+  Feed.prototype.removeFilters = function(filters) {
+  }
+
+  Feed.prototype.resetFilters = function(filters) {
+  }
+
+  // State management
+
+  Feed.prototype.getPageCount = function() {
+  }
+
+  Feed.prototype.getCurrentPage = function() {
+  }
+
+  Feed.prototype.setEntriesPerPage = function(number) {
+    this.entriesPerPage = number;
+  }
+
   // Entries management
 
   Feed.prototype.addEntry = function(entry) {
 
+    // TO DO
     // types
     // add by: timestamp up/down; always to top; always to bottom
 
     entry.setParent(this);
     this.entryList.push(entry);
 
+    // TO DO
+    // event onBeforeEntryInsert()
+
     this.outputContainer.innerHTML = '<div id="' + entry.getViewId() + '"></div>' + this.outputContainer.innerHTML;
+
+    // TO DO
+    // event onAfterEntryInsert()
 
     entry.render();
   };
