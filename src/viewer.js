@@ -15,7 +15,7 @@ var Viewer = (function() {
 
   Viewer.prototype.InitClickHeatMap = function() {}
 
-  Viewer.prototype.InitScrollkHeatMap = function() {}
+  Viewer.prototype.InitScrollingHeatMap = function() {}
 
   return Viewer;
 
